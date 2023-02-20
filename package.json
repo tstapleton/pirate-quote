@@ -8,7 +8,9 @@
 	"license": "MIT",
 	"scripts": {
 		"build": "tsc",
-		"prepare": "husky install"
+		"clean": "rm -rf dist",
+		"prepare": "husky install",
+		"prepublish": "npm run clean && npm run build"
 	},
 	"lint-staged": {
 		"**/*": "prettier --write --ignore-unknown"
@@ -19,5 +21,12 @@
 		"lint-staged": "13.1.2",
 		"prettier": "2.8.4",
 		"typescript": "4.9.5"
-	}
+	},
+	"publishConfig": {
+		"main": "dist/index.js",
+		"types": "dist/index.d.ts"
+	},
+	"files": [
+		"dist"
+	]
 }
