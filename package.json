@@ -1,9 +1,20 @@
 {
-  "name": "@tsociety/pirate-quote",
-  "version": "0.0.1",
-  "description": "Generate a random pirate quote",
-  "main": "index.js",
-  "repository": "git@github.com:tstapleton/pirate-quote.git",
-  "author": "Tom Stapleton <tstapleton@gmail.com>",
-  "license": "MIT"
+	"name": "@tsociety/pirate-quote",
+	"version": "0.0.1",
+	"description": "Generate a random pirate quote",
+	"main": "index.js",
+	"repository": "git@github.com:tstapleton/pirate-quote.git",
+	"author": "Tom Stapleton <tstapleton@gmail.com>",
+	"license": "MIT",
+	"scripts": {
+		"prepare": "husky install"
+	},
+	"lint-staged": {
+		"**/*": "prettier --write --ignore-unknown"
+	},
+	"devDependencies": {
+		"husky": "8.0.3",
+		"lint-staged": "13.1.2",
+		"prettier": "2.8.4"
+	}
 }
