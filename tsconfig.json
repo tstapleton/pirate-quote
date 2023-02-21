@@ -1,0 +1,9 @@
+{
+	"extends": "@tsconfig/strictest/tsconfig.json",
+	"compilerOptions": {
+		"declaration": true,
+		"lib": ["DOM", "ES2015"],
+		"outDir": "dist"
+	},
+	"include": ["src"]
+}
