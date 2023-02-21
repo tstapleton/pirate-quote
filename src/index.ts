@@ -1,6 +1,8 @@
-const defaultQuote = `I be cuttin' off yer arse an' feedin' it to me matey.`;
+export type PirateQuote = string;
 
-export async function getQuote(): Promise<string> {
+const defaultQuote: PirateQuote = `I be cuttin' off yer arse an' feedin' it to me matey.`;
+
+export async function getQuote(): Promise<PirateQuote> {
 	try {
 		const response = await fetch('http://gangstaname.com/quotes/pirate');
 		const body = await response.text();
