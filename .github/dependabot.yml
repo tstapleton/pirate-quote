@@ -1,0 +1,12 @@
+# Please see the docs for configuration options:
+# https://docs.github.com/github/administering-a-repository/configuration-options-for-dependency-updates
+version: 2
+updates:
+  - package-ecosystem: 'npm'
+    directory: '/'
+    schedule:
+      interval: 'weekly'
+    open-pull-requests-limit: 5
+    allow:
+      # Only direct dependencies, skip indirect deps in the lockfile
+      - dependency-type: 'direct'
