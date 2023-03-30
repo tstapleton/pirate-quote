@@ -1,6 +1,6 @@
 export type PirateQuote = string;
 
-const defaultQuote: PirateQuote = `I be cuttin' off yer arse an' feedin' it to me matey.`;
+export const defaultQuote: PirateQuote = `I be cuttin' off yer arse an' feedin' it to me matey.`;
 
 export async function getQuote(): Promise<PirateQuote> {
 	try {
