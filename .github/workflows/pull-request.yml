@@ -22,3 +22,18 @@ jobs:
         run: yarn lint
       - name: Run unit tests
         run: yarn test:ci
+      - name: Download artifact
+        id: download-artifact
+        uses: dawidd6/action-download-artifact@v2
+        with:
+          workflow: main.yml
+          branch: main
+          name: code-coverage-report
+          path: coverage/base
+      - name: Report test coverage
+        uses: ArtiomTr/jest-coverage-report-action@v2
+        with:
+          annotations: none
+          base-coverage-file: coverage/base/report.json
+          coverage-file: coverage/report.json
+          skip-step: all
