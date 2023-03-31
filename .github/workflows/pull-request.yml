@@ -12,10 +12,15 @@ jobs:
     steps:
       - name: Checkout repo
         uses: actions/checkout@v3
+        with:
+          # yarn versions needs more git history
+          fetch-depth: 0
       - name: Setup Node
         uses: actions/setup-node@v3
         with:
           node-version: 18
+          scope: '@tstapleton'
+          registry-url: 'https://npm.pkg.github.com'
       - name: Build package
         run: yarn build
       - name: Lint code

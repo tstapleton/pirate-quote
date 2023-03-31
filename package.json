@@ -1,5 +1,5 @@
 {
-	"name": "@tsociety/pirate-quote",
+	"name": "@tstapleton/pirate-quote",
 	"version": "0.0.5",
 	"description": "Generate a random pirate quote",
 	"main": "src/index.ts",
