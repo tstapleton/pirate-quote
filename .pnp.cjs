@@ -28,7 +28,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         [null, {\
           "packageLocation": "./",\
           "packageDependencies": [\
-            ["@tsconfig/strictest", "npm:1.0.2"],\
+            ["@tsconfig/strictest", "npm:2.0.0"],\
             ["@types/jest", "npm:29.5.0"],\
             ["@types/node", "npm:18.15.11"],\
             ["@typescript-eslint/eslint-plugin", "virtual:efdfb383fbd9c6a789348d7652355c31ed07c9539fbb2f7da0ac711c4ed60a753b90c9bd812b2c90eb9cad4e777e29d18eaec51ec3627c85bd64f6e048f1ec6b#npm:5.57.0"],\
@@ -1415,10 +1415,10 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         }]\
       ]],\
       ["@tsconfig/strictest", [\
-        ["npm:1.0.2", {\
-          "packageLocation": "./.yarn/cache/@tsconfig-strictest-npm-1.0.2-858578168e-2ebf63d650.zip/node_modules/@tsconfig/strictest/",\
+        ["npm:2.0.0", {\
+          "packageLocation": "./.yarn/cache/@tsconfig-strictest-npm-2.0.0-b46e66f4bd-a21d79fb3e.zip/node_modules/@tsconfig/strictest/",\
           "packageDependencies": [\
-            ["@tsconfig/strictest", "npm:1.0.2"]\
+            ["@tsconfig/strictest", "npm:2.0.0"]\
           ],\
           "linkType": "HARD"\
         }]\
@@ -1428,7 +1428,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./",\
           "packageDependencies": [\
             ["@tstapleton/pirate-quote", "workspace:."],\
-            ["@tsconfig/strictest", "npm:1.0.2"],\
+            ["@tsconfig/strictest", "npm:2.0.0"],\
             ["@types/jest", "npm:29.5.0"],\
             ["@types/node", "npm:18.15.11"],\
             ["@typescript-eslint/eslint-plugin", "virtual:efdfb383fbd9c6a789348d7652355c31ed07c9539fbb2f7da0ac711c4ed60a753b90c9bd812b2c90eb9cad4e777e29d18eaec51ec3627c85bd64f6e048f1ec6b#npm:5.57.0"],\
