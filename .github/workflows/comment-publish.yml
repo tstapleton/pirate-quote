@@ -1,0 +1,50 @@
+name: Publish Package
+on:
+  issue_comment:
+    types:
+      - created
+jobs:
+  publish-package:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read
+      packages: write
+      pull-requests: write
+    # Only run for comments on pull requests
+    if: ${{ github.event.issue.pull_request }}
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+          scope: '@tstapleton'
+          registry-url: 'https://npm.pkg.github.com'
+      - name: Create yarnrc.yml
+        run: |
+          cat >> ./.yarnrc.yml <<EOF
+          npmAuthToken: "$NODE_AUTH_TOKEN"
+          npmScopes:
+            tstapleton:
+              npmPublishRegistry: "https://npm.pkg.github.com"
+              npmAlwaysAuth: true
+          EOF
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Publish package
+        run: yarn version 0.0.0-${{ github.event.pull_request.head.sha }} && yarn npm publish --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - uses: marocchino/sticky-pull-request-comment@v2
+        with:
+          header: publish
+          hide_and_recreate: true
+          hide_classify: OUTDATED
+          message: |
+            Install the package by running:
+            ```
+            yarn add --dev @tstapleton/pirate-quote@0.0.0-${{ github.event.pull_request.head.sha }}
+            ```
+            Happy coding! 📦 🚀

@@ -919,9 +919,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tsociety/pirate-quote@workspace:.":
+"@tstapleton/pirate-quote@workspace:.":
   version: 0.0.0-use.local
-  resolution: "@tsociety/pirate-quote@workspace:."
+  resolution: "@tstapleton/pirate-quote@workspace:."
   dependencies:
     "@tsconfig/strictest": 1.0.2
     "@types/jest": 29.5.0
