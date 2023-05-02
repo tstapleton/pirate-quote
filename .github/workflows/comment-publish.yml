@@ -39,12 +39,11 @@ jobs:
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Publish package
-        run: yarn version 0.0.0-${{ steps.comment-branch.outputs.head_ref }} && yarn npm publish --access public
+        run: yarn version 0.0.0-${{ github.run_id }} && yarn npm publish --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Add comment to PR
         uses: actions/github-script@v6
-        if: always()
         with:
           script: |
             await github.rest.issues.createComment({
@@ -53,19 +52,8 @@ jobs:
               repo: context.repo.repo,
               body: `Install the package by running:
                 \`\`\`
-                yarn add --dev @tstapleton/pirate-quote@0.0.0-${{ steps.comment-branch.outputs.head_ref }}
+                yarn add --dev @tstapleton/pirate-quote@0.0.0-${{ github.run_id }}
                 \`\`\`
                 Happy coding! 📦 🚀
               `
             })
-      - uses: marocchino/sticky-pull-request-comment@v2
-        with:
-          header: publish
-          hide_and_recreate: true
-          hide_classify: OUTDATED
-          message: |
-            Install the package by running:
-            ```
-            yarn add --dev @tstapleton/pirate-quote@0.0.0-${{ steps.comment-branch.outputs.head_ref }}
-            ```
-            Happy coding! 📦 🚀
