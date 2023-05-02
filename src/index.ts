@@ -17,3 +17,8 @@ export async function getQuote(): Promise<PirateQuote> {
 		return defaultQuote;
 	}
 }
+
+export function sayHello(input: string): void {
+	const name = input || 'World';
+	console.log(`Hello, ${name}!`);
+}
