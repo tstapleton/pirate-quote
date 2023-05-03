@@ -4,61 +4,23 @@ on:
     types:
       - created
 jobs:
-  publish-package:
+  setup:
     runs-on: ubuntu-latest
     timeout-minutes: 15
-    permissions:
-      contents: read
-      packages: write
-      pull-requests: write
-    # Only run a specific comment on a pull request
+    outputs:
+      ref: ${{ steps.pull-request-branch.outputs.head_ref }}
+    # Only run on a specific pull request comment
     if: github.event.issue.pull_request && contains(github.event.comment.body, 'publish this please')
     steps:
       - name: Get PR branch
-        uses: xt0rted/pull-request-comment-branch@v1
-        id: comment-branch
-      - name: Checkout PR branch
-        uses: actions/checkout@v3
-        with:
-          ref: ${{ steps.comment-branch.outputs.head_ref }}
-          # yarn versions needs more git history
-          fetch-depth: 0
-      - name: Setup Node
-        uses: actions/setup-node@v3
-        with:
-          node-version: 18
-          scope: '@tstapleton'
-          registry-url: 'https://npm.pkg.github.com'
-      - name: Create yarnrc.yml
-        run: |
-          cat >> ./.yarnrc.yml <<EOF
-          npmAuthToken: "$NODE_AUTH_TOKEN"
-          npmScopes:
-            tstapleton:
-              npmPublishRegistry: "https://npm.pkg.github.com"
-              npmAlwaysAuth: true
-          EOF
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - name: Publish package
-        run: yarn version 0.0.0-$(git rev-parse HEAD) && yarn npm publish --access public
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - name: Add comment to PR
-        uses: actions/github-script@v6
-        with:
-          script: |
-            const { name, version } = require(`${process.env.GITHUB_WORKSPACE}/package.json`);
-            const body = [
-              'Install the package by running:',
-              '```',
-              `yarn add --dev ${name}@${version}`,
-              '```',
-              'Happy coding! 📦 🚀'
-            ].join('\n');
-            await github.rest.issues.createComment({
-              issue_number: context.issue.number,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              body
-            })
+        uses: xt0rted/pull-request-comment-branch@v2
+        id: pull-request-branch
+  publish:
+    needs:
+      - setup
+    uses: ./.github/workflows/workflow-publish.yml
+    with:
+      ref: ${{ needs.setup.outputs.ref }}
+      version: 0.0.0-${{ needs.setup.outputs.ref }}
+      pull-request-number: ${{ github.event.issue.number }}
+    secrets: inherit
