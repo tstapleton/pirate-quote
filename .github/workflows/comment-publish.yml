@@ -11,7 +11,7 @@ jobs:
       contents: read
       packages: write
       pull-requests: write
-    # Only run for comments on pull requests
+    # Only run a specific comment on a pull request
     if: github.event.issue.pull_request && contains(github.event.comment.body, 'publish this please')
     steps:
       - name: Get PR branch
@@ -41,21 +41,24 @@ jobs:
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Publish package
-        run: yarn version 0.0.0-${{ github.run_id }} && yarn npm publish --access public
+        run: yarn version 0.0.0-$(git rev-parse HEAD) && yarn npm publish --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Add comment to PR
         uses: actions/github-script@v6
         with:
           script: |
+            const { name, version } = require(`${process.env.GITHUB_WORKSPACE}/package.json`);
+            const body = [
+              'Install the package by running:',
+              '```',
+              `yarn add --dev ${name}@${version}`,
+              '```',
+              'Happy coding! 📦 🚀'
+            ].join('\n');
             await github.rest.issues.createComment({
               issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
-              body: `Install the package by running:
-                \`\`\`
-                yarn add --dev @tstapleton/pirate-quote@0.0.0-${{ github.run_id }}
-                \`\`\`
-                Happy coding! 📦 🚀
-              `
+              body
             })
