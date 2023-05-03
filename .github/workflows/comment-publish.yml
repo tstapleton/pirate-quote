@@ -9,6 +9,7 @@ jobs:
     timeout-minutes: 15
     outputs:
       ref: ${{ steps.pull-request-branch.outputs.head_ref }}
+      sha: ${{ steps.pull-request-branch.outputs.head_sha }}
     # Only run on a specific pull request comment
     if: github.event.issue.pull_request && contains(github.event.comment.body, 'publish this please')
     steps:
@@ -21,6 +22,6 @@ jobs:
     uses: ./.github/workflows/workflow-publish.yml
     with:
       ref: ${{ needs.setup.outputs.ref }}
-      version: 0.0.0-${{ needs.setup.outputs.ref }}
+      version: 0.0.0-${{ needs.setup.outputs.sha }}
       pull-request-number: ${{ github.event.issue.number }}
     secrets: inherit
