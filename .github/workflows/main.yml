@@ -29,10 +29,9 @@ jobs:
         with:
           name: code-coverage-report
           path: coverage/report.json
-  publish:
-    needs:
-      - build
-    uses: ./.github/workflows/workflow-publish.yml
-    with:
-      version: patch
-    secrets: inherit
+      - name: Push tag for new package version
+        uses: anothrNick/github-tag-action@1.61.0
+        env:
+          DEFAULT_BUMP: patch
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          WITH_V: true
