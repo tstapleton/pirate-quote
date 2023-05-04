@@ -1,4 +1,4 @@
-name: Pull Requests
+name: Pull Request Build
 on:
   pull_request:
 # Cancel in-progress jobs when new commits are pushed
