@@ -1,0 +1,11 @@
+name: Publish Package
+on:
+  push:
+    tags:
+      - v*
+jobs:
+  publish:
+    uses: ./.github/workflows/workflow-publish.yml
+    with:
+      version: ${{ github.ref_name }}
+    secrets: inherit
