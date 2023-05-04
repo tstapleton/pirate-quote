@@ -1,4 +1,4 @@
-name: Publish Package
+name: Publish Package on Comment
 on:
   issue_comment:
     types:
