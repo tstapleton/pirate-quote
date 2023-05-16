@@ -9,6 +9,6 @@ set +x
 
 # merge master into branch to run
 git fetch origin
-git merge origin/master
+git merge origin/main
 
 yarn build
