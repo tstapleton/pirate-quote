@@ -12,3 +12,7 @@ git fetch origin --unshallow
 git merge origin/main
 
 yarn build
+
+git rev-parse HEAD
+
+echo "Done!"
