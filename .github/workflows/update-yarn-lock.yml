@@ -31,8 +31,8 @@ jobs:
       - name: Commit changes
         # https://github.com/actions/checkout#push-a-commit-using-the-built-in-token
         run: |
-          git config user.name github-actions
-          git config user.email github-actions@github.com
+          git config user.name github-actions[bot]
+          git config user.email github-actions[bot]@users.noreply.github.com
           git checkout -b ${{ env.branch }}
           git add .
           git commit -m "Regenerate yarn.lock"
