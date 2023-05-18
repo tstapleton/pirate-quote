@@ -18,7 +18,10 @@ jobs:
         with:
           node-version: 18
       - name: Update dependencies
+        # Yarn cannot modify the lockfile on CI by default, so we'll disable that check
+        # https://github.com/renovatebot/renovate/discussions/9481?sort=old#discussioncomment-798627
         run: |
+          export YARN_ENABLE_IMMUTABLE_INSTALLS=false
           rm yarn.lock
           yarn install
       - name: Generate hash of lockfile
