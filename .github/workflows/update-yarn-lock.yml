@@ -3,8 +3,10 @@ on:
   schedule:
     # Tuesdays at 15:00 UTC
     - cron:  '0 15 * * 2'
-  # enable the workflow to be triggered manually
+  # allow the workflow to be triggered manually
   workflow_dispatch:
+  # temporary to test the workflow
+  pull_request:
 jobs:
   update-yarn-lock:
     runs-on: ubuntu-latest
