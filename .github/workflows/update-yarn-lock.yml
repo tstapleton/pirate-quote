@@ -26,7 +26,7 @@ jobs:
           yarn install
       - name: Generate hash of lockfile
         run: |
-          BRANCH=github-actions/regenerate-yarn-lock-${{ hashFiles('yarn.lock') }}
+          BRANCH=github-actions/regenerate-yarn-lock-$(${{ hashFiles('yarn.lock') }} | head -c7)
           echo "branch=$BRANCH" >> "$GITHUB_ENV"
       - name: Commit changes
         # https://github.com/actions/checkout#push-a-commit-using-the-built-in-token
@@ -36,7 +36,7 @@ jobs:
           git checkout -b ${{ env.branch }}
           git add .
           git commit -m "Regenerate yarn.lock"
-          git push
+          git push origin ${{ env.branch }}
       - name: Create pull request
         uses: actions/github-script@v6
         with:
