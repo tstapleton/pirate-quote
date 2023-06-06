@@ -25,6 +25,9 @@ jobs:
     # Each step is a shell script to execute or an action to run
     steps:
       # Execute shell scripts using `run`
+      # Contexts are a way to access information about workflow runs, variables,
+      # runner environments, jobs, and steps, syntax is ${{ <context> }}
+      # See https://docs.github.com/en/actions/learn-github-actions/contexts
       - run: |
           echo "🎉 The job was triggered by a ${{ github.event_name }} event."
       - run: |
@@ -69,3 +72,6 @@ jobs:
       - name: List files in the repository
         run: |
           ls ${{ github.workspace }}
+
+# Can run this locally using https://github.com/nektos/act
+# act pull_request
