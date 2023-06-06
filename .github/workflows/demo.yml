@@ -1,0 +1,79 @@
+# GitHub Actions is a platform to automate developer workflows
+# A CI/CD pipeline is just one of many workflows
+
+# Workflow: a configurable automated process that will run one or more jobs
+# Triggered by an event in the repo, or manually, or at a defined schedule
+# Exist in .github/workflows and defined in a YAML file
+
+name: GitHub Actions Demo
+
+# Event: the activity that triggers the workflow run, i.e. when something
+# happens IN or TO the repository
+# See https://docs.github.com/en/actions/using-workflows/events-that-trigger-workflows
+on:
+  - pull_request
+
+# Job: a set of steps in a workflow that is executed on the same runner
+jobs:
+  # Defines the job name, anything clear is fine
+  first:
+    # Runner: server that runs your workflows when they are triggered
+    # Each runner can run a single job at a time
+    # GitHub hosted: ubuntu-latest
+    # Our self-hosted: crunchbase-client-app
+    runs-on: ubuntu-latest
+    # Each step is a shell script to execute or an action to run
+    steps:
+      # Execute shell scripts using `run`
+      # Contexts are a way to access information about workflow runs, variables,
+      # runner environments, jobs, and steps, syntax is ${{ <context> }}
+      # See https://docs.github.com/en/actions/learn-github-actions/contexts
+      - run: |
+          echo "🎉 The job was triggered by a ${{ github.event_name }} event."
+      - run: |
+          echo "🔎 The name of your branch is ${{ github.ref }}."
+          echo "Your repository is ${{ github.repository }}."
+      # Pull requests events checkout a merge commit, not HEAD
+      # See https://github.com/actions/checkout/issues/426
+      - name: Check out repository code
+        # Action: custom application for GHA that performs a complex task,
+        # specified with `uses`
+        uses: actions/checkout@v3
+        # Pass arguments to actions using `with`
+        with:
+          fetch-depth: 0
+      - run: echo "💡 ${{ github.repository }} has been cloned to the runner."
+      - name: List files in the repository
+        run: |
+          ls ${{ github.workspace }}
+      # Run commands
+      - name: Say hello
+        run: |
+          npx cowsay Hello, world
+      # Write a file to disk
+      - name: Create a file
+        run: |
+          echo "hello" > foo.txt
+          cat foo.txt
+      # See that the new file exists
+      - name: List files in the repository
+        run: |
+          ls ${{ github.workspace }}
+
+      - run: echo "🍏 This job's status is ${{ job.status }}."
+
+  second:
+    runs-on: ubuntu-latest
+    # Needs: identify jobs that must be completed successfully before this job
+    # will run; because jobs run in parallel by default
+    # See https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#jobsjob_idneeds
+    needs:
+      - first
+    steps:
+      # Nothing here - new job, empty runner
+      - name: List files in the repository
+        run: |
+          ls ${{ github.workspace }}
+
+# Can run this locally using https://github.com/nektos/act
+# act pull_request
