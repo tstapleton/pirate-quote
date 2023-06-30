@@ -37,3 +37,15 @@ jobs:
           base-coverage-file: coverage/base/report.json
           coverage-file: coverage/report.json
           skip-step: all
+
+  # Used as the required status check on PRs so a failure prevents a merge
+  build-result:
+    runs-on: ubuntu-latest
+    permissions: {}
+    needs:
+      - build
+    if: ${{ always() }}
+    steps:
+      # If any of the needed jobs fail or are cancelled then fail this job
+      - if: ${{ contains(needs.*.result, 'failure') || contains(needs.*.result, 'cancelled') }}
+        run: exit 1
