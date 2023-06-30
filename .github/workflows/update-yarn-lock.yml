@@ -1,0 +1,62 @@
+name: Update yarn.lock
+on:
+  schedule:
+    # Tuesdays at 15:00 UTC
+    - cron:  '0 15 * * 2'
+  # allow the workflow to be triggered manually
+  workflow_dispatch:
+  # temporary to test the workflow
+  pull_request:
+jobs:
+  update-yarn-lock:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout branch
+        uses: actions/checkout@v3
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+      - name: Update dependencies
+        # Yarn cannot modify the lockfile on CI by default, so we'll disable that check
+        # https://github.com/renovatebot/renovate/discussions/9481?sort=old#discussioncomment-798627
+        run: |
+          export YARN_ENABLE_IMMUTABLE_INSTALLS=false
+          rm yarn.lock
+          yarn install
+      - name: Generate hash of lockfile
+        # Hash the lockfile to generate a unique branch so we push to new branches
+        run: |
+          BRANCH=github-actions/regenerate-yarn-lock-$(echo ${{ hashFiles('yarn.lock') }} | head -c7)
+          echo "branch=$BRANCH" >> "$GITHUB_ENV"
+      - name: Commit changes
+        run: |
+          git config user.name github-actions[bot]
+          git config user.email github-actions[bot]@users.noreply.github.com
+          git checkout -b ${{ env.branch }}
+          git add .
+          git commit -m "Regenerate yarn.lock"
+          git push origin ${{ env.branch }}
+      - name: Create pull request
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const { repo, owner } = context.repo;
+            const result = await github.rest.pulls.create({
+              title: 'Regenerate yarn.lock',
+              owner,
+              repo,
+              head: '${{ env.branch }}',
+              base: 'main',
+              body: [
+                'This is an update to our indirect dependencies. If the build passes, it should be good to merge.',
+                '',
+                'Happy coding!',
+              ].join('\n')
+            });
+            github.rest.issues.addLabels({
+              owner,
+              repo,
+              issue_number: result.data.number,
+              labels: ['Dependencies']
+            });
