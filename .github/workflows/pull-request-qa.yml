@@ -12,4 +12,4 @@ jobs:
   qa-approved:
     runs-on: ubuntu-latest
     steps:
-      - uses: tstapleton/actions-qa-approved@main
+      - uses: tstapleton/actions-coverage@main
