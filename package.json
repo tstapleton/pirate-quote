@@ -9,6 +9,7 @@
 	"scripts": {
 		"build": "tsc",
 		"clean": "rm -rf dist",
+		"format": "prettier --write --ignore-unknown \"**/*\"",
 		"prepare": "husky install",
 		"prepublish": "npm run clean && npm run build",
 		"lint": "eslint src",

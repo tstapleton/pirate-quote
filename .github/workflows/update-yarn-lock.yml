@@ -2,7 +2,7 @@ name: Update yarn.lock
 on:
   schedule:
     # Tuesdays at 15:00 UTC
-    - cron:  '0 15 * * 2'
+    - cron: '0 15 * * 2'
   # allow the workflow to be triggered manually
   workflow_dispatch:
 jobs:
