@@ -12,4 +12,12 @@ jobs:
   qa-approved:
     runs-on: ubuntu-latest
     steps:
-      - uses: tstapleton/actions-coverage@main
+      - name: Check out repository
+        uses: actions/checkout@v3
+        with:
+          repository: tstapleton/actions-qa-approved
+          ref: main
+          token: ${{ secrets.PAT_PUSH_TAG }}
+          path: ./.github/actions/actions-qa-approved
+      - name: Run my action
+        uses: ./.github/actions/actions-qa-approved
