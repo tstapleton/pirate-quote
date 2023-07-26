@@ -10,3 +10,12 @@ updates:
     allow:
       # Only direct dependencies, skip indirect deps in the lockfile
       - dependency-type: 'direct'
+    ignore:
+      # Major Node version updates will be done manually
+      - dependency-name: "@types/node"
+        update-types:
+          - "version-update:semver-major"
+    groups:
+      typescript-eslint:
+        patterns:
+          - "@typescript-eslint/*"

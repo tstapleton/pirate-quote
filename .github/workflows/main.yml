@@ -28,5 +28,6 @@ jobs:
         uses: anothrNick/github-tag-action@1.61.0
         env:
           DEFAULT_BUMP: patch
+          # Fine-grained token GHA pirate-quote push tag expires 2023-10-23
           GITHUB_TOKEN: ${{ secrets.PAT_PUSH_TAG }}
           WITH_V: true
