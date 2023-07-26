@@ -1,0 +1,15 @@
+name: Pull Request QA
+on:
+  pull_request:
+    types:
+      - labeled
+      - unlabeled
+      # We need to re-run this workflow when new commits are pushed because
+      # status checks happen on commits (rather than the entire PR), and new
+      # commits may be pushed after the QA Approved label was applied
+      - synchronize
+jobs:
+  qa-approved:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: tstapleton/actions-qa-approved
