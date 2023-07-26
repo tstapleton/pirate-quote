@@ -17,7 +17,7 @@ jobs:
         with:
           repository: tstapleton/actions-qa-approved
           ref: main
-          token: ${{ secrets.PAT_PUSH_TAG }}
+          token: ${{ secrets.PAT_READ_ACTIONS }}
           path: ./.github/actions/actions-qa-approved
       - name: Run my action
         uses: ./.github/actions/actions-qa-approved
