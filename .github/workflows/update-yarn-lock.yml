@@ -5,8 +5,6 @@ on:
     - cron:  '0 15 * * 2'
   # allow the workflow to be triggered manually
   workflow_dispatch:
-  # temporary to test the workflow
-  pull_request:
 jobs:
   update-yarn-lock:
     runs-on: ubuntu-latest
