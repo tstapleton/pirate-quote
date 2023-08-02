@@ -5,8 +5,6 @@ on:
     - cron: '0 15 * * 2'
   # allow the workflow to be triggered manually
   workflow_dispatch:
-  # temporary to test the workflow
-  pull_request:
 jobs:
   update-yarn-lock:
     runs-on: ubuntu-latest
@@ -60,7 +58,7 @@ jobs:
               });
               core.info(`Opened pull request ${result.data.html_url}`)
             } catch (e) {
-              if (!e.message.includes("pull request already exists")) {
+              if (e.message.includes("pull request already exists")) {
                 // The PR might already exist so we'll ignore this error
                 core.info('Force pushed to an existing open pull request');
                 return
