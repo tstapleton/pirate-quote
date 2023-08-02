@@ -60,7 +60,7 @@ jobs:
               });
               core.info(`Opened pull request ${result.data.html_url}`)
             } catch (e) {
-              if (e.message.includes("pull request already exists")) {
+              if (!e.message.includes("pull request already exists")) {
                 // The PR might already exist so we'll ignore this error
                 core.info('Force pushed to an existing open pull request');
                 return
