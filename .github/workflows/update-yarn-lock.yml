@@ -58,9 +58,11 @@ jobs:
                 issue_number: result.data.number,
                 labels: ['Dependencies']
               });
+              core.info(`Opened pull request ${result.data.html_url}`)
             } catch (e) {
               if (e.message.includes("pull request already exists")) {
                 // The PR might already exist so we'll ignore this error
+                core.info('Force pushed to an existing open pull request');
                 return
               }
               // Report any other error as a failure
