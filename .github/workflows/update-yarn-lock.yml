@@ -35,6 +35,7 @@ jobs:
         with:
           script: |
             const { repo, owner } = context.repo;
+            core.info(JSON.stringify(context))
             try {
               const result = await github.rest.pulls.create({
                 title: 'Regenerate yarn.lock',
