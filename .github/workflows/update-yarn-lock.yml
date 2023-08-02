@@ -39,21 +39,30 @@ jobs:
         with:
           script: |
             const { repo, owner } = context.repo;
-            const result = await github.rest.pulls.create({
-              title: 'Regenerate yarn.lock',
-              owner,
-              repo,
-              head: 'github-actions/regenerate-yarn-lock',
-              base: 'main',
-              body: [
-                'This is an update to our indirect dependencies. If the build passes, it should be good to merge.',
-                '',
-                'Happy coding!',
-              ].join('\n')
-            });
-            github.rest.issues.addLabels({
-              owner,
-              repo,
-              issue_number: result.data.number,
-              labels: ['Dependencies']
-            });
+            try {
+              const result = await github.rest.pulls.create({
+                title: 'Regenerate yarn.lock',
+                owner,
+                repo,
+                head: 'github-actions/regenerate-yarn-lock',
+                base: 'main',
+                body: [
+                  'This is an update to our indirect dependencies. If the build passes, it should be good to merge.',
+                  '',
+                  'Happy coding!',
+                ].join('\n')
+              });
+              github.rest.issues.addLabels({
+                owner,
+                repo,
+                issue_number: result.data.number,
+                labels: ['Dependencies']
+              });
+            } catch (e) {
+              if (e.message.includes("pull request already exists")) {
+                // The PR might already exist so we'll ignore this error
+                return
+              }
+              // Report any other error as a failure
+              throw e;
+            }
