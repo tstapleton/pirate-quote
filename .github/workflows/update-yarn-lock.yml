@@ -5,6 +5,8 @@ on:
     - cron: '0 15 * * 2'
   # allow the workflow to be triggered manually
   workflow_dispatch:
+  # temporary to test the workflow
+  pull_request:
 jobs:
   update-yarn-lock:
     runs-on: ubuntu-latest
@@ -16,25 +18,20 @@ jobs:
         with:
           node-version: 18
       - name: Update dependencies
-        # Yarn cannot modify the lockfile on CI by default, so we'll disable that check
+        # Yarn cannot modify the lockfile on CI by default, so we'll disable
+        # that check before installing
         # https://github.com/renovatebot/renovate/discussions/9481?sort=old#discussioncomment-798627
         run: |
-          export YARN_ENABLE_IMMUTABLE_INSTALLS=false
           rm yarn.lock
-          yarn install
-      - name: Generate hash of lockfile
-        # Hash the lockfile to generate a unique branch so we push to new branches
-        run: |
-          BRANCH=github-actions/regenerate-yarn-lock-$(echo ${{ hashFiles('yarn.lock') }} | head -c7)
-          echo "branch=$BRANCH" >> "$GITHUB_ENV"
+          YARN_ENABLE_IMMUTABLE_INSTALLS=false yarn install
       - name: Commit changes
         run: |
           git config user.name github-actions[bot]
           git config user.email github-actions[bot]@users.noreply.github.com
-          git checkout -b ${{ env.branch }}
+          git checkout -b github-actions/regenerate-yarn-lock
           git add .
           git commit -m "Regenerate yarn.lock"
-          git push origin ${{ env.branch }}
+          git push origin github-actions/regenerate-yarn-lock --force
       - name: Create pull request
         uses: actions/github-script@v6
         with:
@@ -44,7 +41,7 @@ jobs:
               title: 'Regenerate yarn.lock',
               owner,
               repo,
-              head: '${{ env.branch }}',
+              head: 'github-actions/regenerate-yarn-lock',
               base: 'main',
               body: [
                 'This is an update to our indirect dependencies. If the build passes, it should be good to merge.',
