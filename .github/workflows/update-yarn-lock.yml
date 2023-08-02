@@ -16,45 +16,51 @@ jobs:
         with:
           node-version: 18
       - name: Update dependencies
-        # Yarn cannot modify the lockfile on CI by default, so we'll disable that check
+        # Yarn cannot modify the lockfile on CI by default, so we'll disable
+        # that check before installing
         # https://github.com/renovatebot/renovate/discussions/9481?sort=old#discussioncomment-798627
         run: |
-          export YARN_ENABLE_IMMUTABLE_INSTALLS=false
           rm yarn.lock
-          yarn install
-      - name: Generate hash of lockfile
-        # Hash the lockfile to generate a unique branch so we push to new branches
-        run: |
-          BRANCH=github-actions/regenerate-yarn-lock-$(echo ${{ hashFiles('yarn.lock') }} | head -c7)
-          echo "branch=$BRANCH" >> "$GITHUB_ENV"
+          YARN_ENABLE_IMMUTABLE_INSTALLS=false yarn install
       - name: Commit changes
         run: |
           git config user.name github-actions[bot]
           git config user.email github-actions[bot]@users.noreply.github.com
-          git checkout -b ${{ env.branch }}
+          git checkout -b github-actions/regenerate-yarn-lock
           git add .
           git commit -m "Regenerate yarn.lock"
-          git push origin ${{ env.branch }}
+          git push origin github-actions/regenerate-yarn-lock --force
       - name: Create pull request
         uses: actions/github-script@v6
         with:
           script: |
             const { repo, owner } = context.repo;
-            const result = await github.rest.pulls.create({
-              title: 'Regenerate yarn.lock',
-              owner,
-              repo,
-              head: '${{ env.branch }}',
-              base: 'main',
-              body: [
-                'This is an update to our indirect dependencies. If the build passes, it should be good to merge.',
-                '',
-                'Happy coding!',
-              ].join('\n')
-            });
-            github.rest.issues.addLabels({
-              owner,
-              repo,
-              issue_number: result.data.number,
-              labels: ['Dependencies']
-            });
+            try {
+              const result = await github.rest.pulls.create({
+                title: 'Regenerate yarn.lock',
+                owner,
+                repo,
+                head: 'github-actions/regenerate-yarn-lock',
+                base: 'main',
+                body: [
+                  'This is an update to our indirect dependencies. If the build passes, it should be good to merge.',
+                  '',
+                  'Happy coding!',
+                ].join('\n')
+              });
+              github.rest.issues.addLabels({
+                owner,
+                repo,
+                issue_number: result.data.number,
+                labels: ['Dependencies']
+              });
+              core.info(`Opened pull request ${result.data.html_url}`)
+            } catch (e) {
+              if (e.message.includes("pull request already exists")) {
+                // The PR might already exist so we'll ignore this error
+                core.info('Force pushed to an existing open pull request');
+                return;
+              }
+              // Report any other error as a failure
+              throw e;
+            }
