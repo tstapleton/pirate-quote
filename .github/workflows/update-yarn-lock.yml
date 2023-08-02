@@ -29,7 +29,9 @@ jobs:
           git config user.name github-actions[bot]
           git config user.email github-actions[bot]@users.noreply.github.com
           git checkout -b github-actions/regenerate-yarn-lock
-          git add .
+          touch file.txt
+          echo "this is a line" > file.txt
+          git add -A
           git commit -m "Regenerate yarn.lock"
           git push origin github-actions/regenerate-yarn-lock --force
       - name: Create pull request
