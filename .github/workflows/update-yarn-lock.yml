@@ -2,7 +2,7 @@ name: Update yarn.lock
 on:
   schedule:
     # Wednesdays at 17:00 UTC
-    - cron: '0 17 * * 3'
+    - cron: '0 17 * * 1'
   # allow the workflow to be triggered manually
   workflow_dispatch:
 jobs:
@@ -33,6 +33,7 @@ jobs:
       - name: Create pull request
         uses: actions/github-script@v6
         with:
+          github-token: ${{ secrets.PAT_CREATE_PULL_REQUEST }}
           script: |
             const { repo, owner } = context.repo;
             try {
