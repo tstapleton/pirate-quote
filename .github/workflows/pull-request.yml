@@ -19,7 +19,7 @@ jobs:
       - name: Get short sha
         id: short-sha
         run: |
-          echo "SHORT_SHA=`echo ${{ github.event.pull_request.head.sha }} | cut -c1-8`" >> $GITHUB_OUTPUT
+          echo "SHORT_SHA=$(echo ${{ github.event.pull_request.head.sha }} | cut -c1-8)" >> $GITHUB_OUTPUT
       - name: Print short sha
         run: |
           echo ${{ steps.short-sha.outputs.SHORT_SHA }}
