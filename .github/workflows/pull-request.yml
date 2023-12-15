@@ -16,6 +16,13 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 18
+      - name: Get short sha
+        id: short-sha
+        run: |
+          echo "SHORT_SHA=`echo ${{ github.event.pull_request.head.sha }} | cut -c1-8`" >> $GITHUB_OUTPUT
+      - name: Print short sha
+        run: |
+          echo ${{ steps.short-sha.outputs.SHORT_SHA }}
       - name: Build package
         run: yarn build
       - name: Lint code
