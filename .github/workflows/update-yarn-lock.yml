@@ -31,7 +31,7 @@ jobs:
           git commit -m "Regenerate yarn.lock"
           git push origin github-actions/regenerate-yarn-lock --force
       - name: Create pull request
-        uses: actions/github-script@v6
+        uses: actions/github-script@v7
         with:
           github-token: ${{ secrets.PAT_CREATE_PULL_REQUEST }}
           script: |
