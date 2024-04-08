@@ -929,7 +929,7 @@ __metadata:
   dependencies:
     "@tsconfig/strictest": 2.0.1
     "@types/jest": 29.5.3
-    "@types/node": 18.17.1
+    "@types/node": 18.19.30
     "@typescript-eslint/eslint-plugin": 6.2.0
     "@typescript-eslint/parser": 6.2.0
     eslint: 8.46.0
@@ -1044,10 +1044,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:18.17.1":
-  version: 18.17.1
-  resolution: "@types/node@npm:18.17.1"
-  checksum: 56201bda9a2d05d68602df63b4e67b0545ac8c6d0280bd5fb31701350a978a577a027501fbf49db99bf177f2242ebd1244896bfd35e89042d5bd7dfebff28d4e
+"@types/node@npm:18.19.30":
+  version: 18.19.30
+  resolution: "@types/node@npm:18.19.30"
+  dependencies:
+    undici-types: ~5.26.4
+  checksum: b3daafa3fe23312f493fc2548c5e03801e1e4a5657af1f327ffae76087b64b926b84daf839297348a7e3c90aced10e3d66126270ad8081d32c979418d93c7828
   languageName: node
   linkType: hard
 
